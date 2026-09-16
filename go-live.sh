@@ -45,7 +45,17 @@ for f in pages:
     if og:
         s = s[:og.end()] + f'<meta property="og:url" content="{url}">\n' + s[og.end():]
 
-    s = re.sub(r'https://rattle\.in', DOMAIN, s)   # og:image, JSON-LD, logo
+    s = re.sub(r'https://rattle\.in', DOMAIN, s)   # JSON-LD, logo, breadcrumbs
+
+    # og:image must be absolute for Facebook/WhatsApp/LinkedIn to fetch it
+    s = s.replace('content="assets/img/og-image.png"',
+                  f'content="{DOMAIN}/assets/img/og-image.png"')
+
+    # Restore the branded thank-you redirect for visitors without JavaScript
+    if 'data-lead-form' in s and '_next' not in s:
+        s = s.replace('<input type="hidden" name="_captcha" value="false">',
+                      '<input type="hidden" name="_captcha" value="false">\n'
+                      f'        <input type="hidden" name="_next" value="{DOMAIN}/thanks.html">')
     f.write_text(s)
 
 sm = pathlib.Path('sitemap.xml')

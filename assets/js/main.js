@@ -5,6 +5,10 @@
 (function () {
   'use strict';
 
+  /* The inline <head> script hides .reveal content and removes that class again after
+     4s if we never load. Signal immediately so it knows we did. */
+  window.__rattleReady = true;
+
   /* ---- Mobile navigation ---- */
   var toggle = document.querySelector('.nav-toggle');
   var links = document.getElementById('nav-links');
@@ -66,6 +70,27 @@
       }
     });
   });
+
+  /* maxHeight is a fixed pixel value, so text that reflows taller (rotating a phone,
+     resizing a window, a late-loading font) would be clipped. Recalculate it. */
+  var faqResizeTimer;
+  var resizeOpenFaqs = function () {
+    document.querySelectorAll('.faq-item.is-open .faq-a').forEach(function (panel) {
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+    });
+  };
+  var queueFaqResize = function () {
+    /* Debounced with setTimeout, NOT requestAnimationFrame: rAF is paused while a tab
+       is in the background, so a resize that happens there would never be applied and
+       the panel would stay clipped when the user came back. */
+    clearTimeout(faqResizeTimer);
+    faqResizeTimer = setTimeout(resizeOpenFaqs, 120);
+  };
+  window.addEventListener('resize', queueFaqResize);
+  window.addEventListener('orientationchange', queueFaqResize);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(resizeOpenFaqs);
+  }
 
   /* ---- Scroll reveal + animated counters ----
      Uses a scroll check rather than IntersectionObserver: IO never fires for an

@@ -23,6 +23,12 @@ if [ "$NOINDEX" -gt 2 ]; then
   echo "########################################################################"
   echo
 fi
+STRAY=$(grep -l 'rattle\.in' *.html sitemap.xml 2>/dev/null | wc -l | tr -d ' ')
+if [ "$STRAY" -gt 0 ]; then
+  echo "NOTE: $STRAY file(s) still reference rattle.in (JSON-LD / sitemap)."
+  echo "      go-live.sh rewrites these when you set your real domain."
+  echo
+fi
 echo "Internal links pointing at files that don't exist:"
 grep -ho 'href="[^"#:]*\.html[^"]*"' *.html | sed 's/href="//;s/"//;s/#.*//' | sort -u \
   | while read -r p; do [ -f "$p" ] || echo "  MISSING: $p"; done

@@ -351,11 +351,14 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
 .float-actions svg { width: 24px; height: 24px; }
 
 /* ---------- 22. Reveal animation ---------- */
-.reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
-.reveal.is-in { opacity: 1; transform: none; }
+/* Scoped to .js: the class is added by a tiny inline script in <head>, and removed
+   again if main.js fails to signal within 4s. So content is hidden ONLY while
+   JavaScript is alive and able to reveal it — never permanently. */
+.js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+.js .reveal.is-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .js .reveal, .js .reveal.is-in { opacity: 1; transform: none; transition: none; }
   * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 
