@@ -45,17 +45,23 @@ for f in pages:
     if og:
         s = s[:og.end()] + f'<meta property="og:url" content="{url}">\n' + s[og.end():]
 
-    s = re.sub(r'https://rattle\.in', DOMAIN, s)   # JSON-LD, logo, breadcrumbs
+    # Any previous placeholder or preview origin becomes the real domain
+    s = re.sub(r'https://(?:rattle\.in|[A-Za-z0-9-]+\.vercel\.app|[A-Za-z0-9-]+\.netlify\.app)',
+               DOMAIN, s)
 
     # og:image must be absolute for Facebook/WhatsApp/LinkedIn to fetch it
     s = s.replace('content="assets/img/og-image.png"',
                   f'content="{DOMAIN}/assets/img/og-image.png"')
 
-    # Restore the branded thank-you redirect for visitors without JavaScript
-    if 'data-lead-form' in s and '_next' not in s:
-        s = s.replace('<input type="hidden" name="_captcha" value="false">',
-                      '<input type="hidden" name="_captcha" value="false">\n'
-                      f'        <input type="hidden" name="_next" value="{DOMAIN}/thanks.html">')
+    # The no-JS form redirect must land on our own thank-you page
+    if 'data-lead-form' in s:
+        if '_next' in s:
+            s = re.sub(r'name="_next" value="[^"]*"',
+                       f'name="_next" value="{DOMAIN}/thanks.html"', s)
+        else:
+            s = s.replace('<input type="hidden" name="_captcha" value="false">',
+                          '<input type="hidden" name="_captcha" value="false">\n'
+                          f'        <input type="hidden" name="_next" value="{DOMAIN}/thanks.html">')
     f.write_text(s)
 
 sm = pathlib.Path('sitemap.xml')
