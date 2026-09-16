@@ -1,0 +1,7 @@
+# TEMPORARY — the site is on a free subdomain and is deliberately kept out of search.
+# Crawling is ALLOWED on purpose: a crawler must be able to read the page to see its
+# noindex tag. Blocking here instead would leave the pages indexable-by-reference.
+#
+# Run ./go-live.sh https://yourdomain.in when your real domain is ready.
+User-agent: *
+Allow: /

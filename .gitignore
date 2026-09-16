@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+.netlify/
+.vercel/
+*.log
+.design/
+.notes/
+.claude/
