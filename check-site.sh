@@ -29,6 +29,28 @@ if [ "$STRAY" -gt 0 ]; then
   echo "      go-live.sh rewrites these when you set your real domain."
   echo
 fi
+# HTML comments cannot nest: a "<!--" inside a comment makes the first "-->" close it
+# early and everything after it renders on the page. This shipped to production once.
+python3 - <<'PYCHECK'
+import pathlib
+bad = []
+for f in sorted(pathlib.Path('.').glob('*.html')):
+    html = f.read_text(); i = 0
+    while True:
+        s = html.find('<!--', i)
+        if s == -1: break
+        e = html.find('-->', s + 4)
+        line = html[:s].count('\n') + 1
+        if e == -1:
+            bad.append(f"{f.name}:{line} UNCLOSED comment"); break
+        if '<!--' in html[s+4:e]:
+            bad.append(f"{f.name}:{line} NESTED comment - content after it will render")
+        i = e + 3
+if bad:
+    print("BROKEN HTML COMMENTS:")
+    for b in bad: print("  " + b)
+    print()
+PYCHECK
 echo "Internal links pointing at files that don't exist:"
 grep -ho 'href="[^"#:]*\.html[^"]*"' *.html | sed 's/href="//;s/"//;s/#.*//' | sort -u \
   | while read -r p; do [ -f "$p" ] || echo "  MISSING: $p"; done
