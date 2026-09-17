@@ -159,11 +159,28 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
   border-bottom: 1px solid rgba(11, 27, 58, .08);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .75);   /* specular hairline */
 }
-/* Scroll edge effect: content fades where it meets the bar instead of colliding with it */
+/* Scroll edge effect. liquid-glass.md > Review checklist #6: "content fades and
+   blurs where it meets a bar instead of colliding with it", and its
+   cross-platform notes ask for "an extra blur and fade band".
+
+   The mask is what makes the blur progressive -- full strength against the bar,
+   gone by the bottom of the band -- so text softens into the glass instead of
+   stopping dead against it. Blur is the right tool here and refraction is not:
+   an SVG feDisplacementMap bends the backdrop, which over body copy reads as
+   torn, doubled text rather than as glass. */
 .site-header::after {
-  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 16px;
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 24px;
   background: linear-gradient(rgba(255, 255, 255, .55), rgba(255, 255, 255, 0));
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+  -webkit-mask-image: linear-gradient(#000 0%, rgba(0, 0, 0, .55) 45%, transparent 100%);
+  mask-image: linear-gradient(#000 0%, rgba(0, 0, 0, .55) 45%, transparent 100%);
   pointer-events: none;
+}
+/* Without a mask the band would blur in a hard-edged rectangle, which is worse
+   than no band at all, so the blur is tied to mask support. */
+@supports not ((mask-image: linear-gradient(#000, transparent)) or (-webkit-mask-image: linear-gradient(#000, transparent))) {
+  .site-header::after, .float-actions::before { -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 .site-header.is-stuck { box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 2px 18px rgba(11,27,58,.07); }
 .nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: var(--nav-h); }
@@ -514,6 +531,16 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
     padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .75), 0 -6px 24px rgba(11, 27, 58, .10);
   }
+  /* The same scroll edge effect, mirrored: content meets this bar from above. */
+  .float-actions::before {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: 22px;
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, .5));
+    -webkit-backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
+    -webkit-mask-image: linear-gradient(transparent 0%, rgba(0, 0, 0, .55) 55%, #000 100%);
+    mask-image: linear-gradient(transparent 0%, rgba(0, 0, 0, .55) 55%, #000 100%);
+    pointer-events: none;
+  }
   .float-actions a {
     width: auto; height: 48px; border-radius: 999px;
     display: flex; align-items: center; justify-content: center; gap: 9px;
@@ -570,7 +597,7 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
     -webkit-backdrop-filter: none; backdrop-filter: none;
     background: #FFFFFF;
   }
-  .site-header::after { display: none; }
+  .site-header::after, .float-actions::before { display: none; }
 }
 @media (prefers-contrast: more) {
   .site-header {
@@ -654,6 +681,9 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
   }
   .site-header::after {
     background: linear-gradient(rgba(10, 16, 32, .55), rgba(10, 16, 32, 0));
+  }
+  .float-actions::before {
+    background: linear-gradient(rgba(10, 16, 32, 0), rgba(10, 16, 32, .5));
   }
   .site-header.is-stuck {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), 0 2px 18px rgba(0, 0, 0, .45);
