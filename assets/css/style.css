@@ -41,7 +41,7 @@ h1, h2, h3, h4 {
   --accent-50: #ECFEFF;
   --ink: #0B1B3A;
   --body: #51607A;
-  --muted: #7A88A0;
+  --muted: #5F6E88;   /* 5.16:1 on white, 4.85:1 on --bg-soft (was #7A88A0: 3.59 / 3.37) */
   --line: #E4E9F2;
   --bg: #FFFFFF;
   --bg-soft: #F6F8FC;
@@ -186,7 +186,7 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
 .logos { border-block: 1px solid var(--line); background: #fff; padding-block: 26px; }
 .logos p { text-align: center; font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
 .logos-track { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px 40px; }
-.logo-chip { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.08rem; color: #96A3B8; letter-spacing: -.02em; transition: color .2s; }
+.logo-chip { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.08rem; color: var(--muted);   /* was #96A3B8 at 2.55:1 */ letter-spacing: -.02em; transition: color .2s; }
 .logo-chip:hover { color: var(--ink); }
 
 /* ---------- 9. Generic grids & cards ---------- */
@@ -328,6 +328,8 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.3fr; gap: 36px; }
 .site-footer h4 { color: #fff; font-size: .95rem; margin-bottom: 18px; font-family: 'Plus Jakarta Sans', sans-serif; }
 .site-footer .brand { color: #fff; margin-bottom: 16px; }
+/* --muted is tuned for light grounds (5.16:1 on white); on ink it drops to 3.31:1 */
+.site-footer .brand small { color: #9FB0CB; }   /* 7.75:1 on --ink */
 .site-footer p { font-size: .9rem; }
 .footer-links { display: grid; gap: 11px; }
 .footer-links a { font-size: .9rem; transition: color .18s, padding-left .18s; }
@@ -347,6 +349,7 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
 .float-actions a { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #fff; box-shadow: var(--shadow-lg); transition: transform .2s; }
 .float-actions a:hover { transform: scale(1.08); }
 .float-wa { background: #25D366; }
+.float-actions a.float-wa { color: var(--ink); }   /* ink, not white: 8.59:1 vs 1.98:1 — needs to outrank ".float-actions a" */
 .float-call { background: var(--brand); }
 .float-actions svg { width: 24px; height: 24px; }
 
