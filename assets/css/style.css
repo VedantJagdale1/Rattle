@@ -116,8 +116,25 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
 .topbar-info { display: flex; flex-wrap: wrap; gap: 8px 22px; }
 .topbar-social { display: flex; gap: 14px; }
 
-.site-header { position: sticky; top: 0; z-index: 90; background: rgba(255,255,255,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
-.site-header.is-stuck { box-shadow: var(--shadow-sm); }
+/* Liquid Glass, regular variant. Functional layer ONLY — header and the mobile
+   action bar. Content surfaces stay opaque: glass on cards or backgrounds is a
+   defect per liquid-glass.md > Review checklist > Layer discipline.
+   Values from its cross-platform section: blur 20–40px, fill 60–80%, saturation 1.2–1.5x. */
+.site-header {
+  position: sticky; top: 0; z-index: 90;
+  background: rgba(255, 255, 255, .72);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid rgba(11, 27, 58, .08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .75);   /* specular hairline */
+}
+/* Scroll edge effect: content fades where it meets the bar instead of colliding with it */
+.site-header::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 16px;
+  background: linear-gradient(rgba(255, 255, 255, .55), rgba(255, 255, 255, 0));
+  pointer-events: none;
+}
+.site-header.is-stuck { box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 2px 18px rgba(11,27,58,.07); }
 .nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: var(--nav-h); }
 .brand { display: inline-flex; align-items: center; gap: 11px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.32rem; color: var(--ink); letter-spacing: -.03em; }
 .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; flex-shrink: 0; }
@@ -378,7 +395,8 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
   .nav-links {
     position: fixed; inset: 0 0 auto; top: calc(var(--nav-h) + 1px);
     flex-direction: column; align-items: stretch; gap: 2px;
-    background: #fff; border-bottom: 1px solid var(--line); box-shadow: var(--shadow);
+    background: #fff; border-bottom: 1px solid var(--line);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9), var(--shadow);
     padding: 14px 20px 22px; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden;
     transition: max-height .28s ease, opacity .2s ease, padding .28s ease;
   }
@@ -452,16 +470,19 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
   /* ---- Bottom action bar ----
      Replaces the floating circles, which overlapped body text. Two thumb-sized
      targets pinned to the bottom of the screen, where thumbs actually are. */
+  /* The bar is the glass; the two actions stay solid so their contrast is unaffected */
   .float-actions {
     right: 0; left: 0; bottom: 0;
     grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: rgba(255, 255, 255, .12);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    box-shadow: 0 -6px 24px rgba(11, 27, 58, .16);
+    gap: 8px;
+    background: rgba(255, 255, 255, .72);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    backdrop-filter: blur(24px) saturate(1.4);
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .75), 0 -6px 24px rgba(11, 27, 58, .10);
   }
   .float-actions a {
-    width: auto; height: 56px; border-radius: 0;
+    width: auto; height: 48px; border-radius: 999px;
     display: flex; align-items: center; justify-content: center; gap: 9px;
     font-weight: 700; font-size: .95rem; box-shadow: none;
   }
@@ -471,7 +492,7 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
   .float-actions svg { width: 20px; height: 20px; }
   .fa-label { display: inline; }
   /* Stop the bar covering the end of the footer */
-  body { padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
 
   /* ---- Tighter rhythm: less scrolling to reach the point ---- */
   .section { padding-block: 48px; }
@@ -506,3 +527,26 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
   border-color: #FECACA;
 }
 .form-status.is-error a { color: #B91C1C; font-weight: 700; }
+
+
+/* Liquid Glass accessibility states — checklist item 5.
+   Reduce Transparency gets an opaque fallback; Increase Contrast gets a stronger
+   fill and border; browsers without backdrop-filter get a near-opaque fill. */
+@media (prefers-reduced-transparency: reduce) {
+  .site-header, .float-actions {
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    background: #FFFFFF;
+  }
+  .site-header::after { display: none; }
+}
+@media (prefers-contrast: more) {
+  .site-header {
+    background: #FFFFFF;
+    border-bottom-color: var(--ink);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .float-actions { background: #FFFFFF; -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header, .float-actions { background: rgba(255, 255, 255, .97); }
+}
