@@ -51,6 +51,38 @@ if bad:
     for b in bad: print("  " + b)
     print()
 PYCHECK
+# Structural guard. A bad find-and-replace once deleted half of index.html — the
+# lead form, the services grid, eight sections — and every check here still passed
+# because nothing asserted that the page still CONTAINED anything.
+python3 - <<'PYSTRUCT'
+import pathlib
+MUST = {
+  "index.html":   [("data-lead-form", 1), ('id="services"', 1), ('class="hero-card"', 1), ("<section", 12)],
+  "contact.html": [("data-lead-form", 1), ("<section", 3)],
+  "services.html":[("card-link", 6), ("<section", 5)],
+  "about.html":   [("<section", 5)],
+  "blog.html":    [("<section", 3)],
+}
+bad = []
+for name, rules in MUST.items():
+    p = pathlib.Path(name)
+    if not p.exists():
+        bad.append(f"{name}: MISSING"); continue
+    t = p.read_text()
+    for marker, least in rules:
+        n = t.count(marker)
+        if n < least:
+            bad.append(f"{name}: {marker!r} found {n}x, expected at least {least}")
+    if len(t) < 8000:
+        bad.append(f"{name}: only {len(t)} bytes — suspiciously small")
+if bad:
+    print("STRUCTURAL FAILURES:")
+    for b in bad: print("  " + b)
+    print()
+else:
+    print("Structure: every page still contains what it should.")
+    print()
+PYSTRUCT
 echo "Internal links pointing at files that don't exist:"
 grep -ho 'href="[^"#:]*\.html[^"]*"' *.html | sed 's/href="//;s/"//;s/#.*//' | sort -u \
   | while read -r p; do [ -f "$p" ] || echo "  MISSING: $p"; done
