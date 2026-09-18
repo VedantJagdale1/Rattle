@@ -765,3 +765,85 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
     .site-header, .float-actions { background: rgba(10, 16, 32, .97); }
   }
 }
+
+/* ==========================================================================
+   25. Mobile refinement
+   Measured on a 375x812 phone before this pass: the homepage ran 19,112px --
+   23.5 screens -- with 1,236px of that being section padding alone. Every
+   grid collapsed to a single column no matter how small its tiles were, so
+   eight industry tiles, each an icon and two words, occupied 1,202px: barely
+   five per screen.
+
+   No copy is cut here. Short tiles pair up, the spacing runs on one scale
+   instead of five different gap values, and the smallest text comes up to a
+   15px floor -- so the page gets shorter AND easier to read rather than
+   trading one for the other.
+   ========================================================================== */
+@media (max-width: 640px) {
+
+  /* --- Pair up the tiles that are short enough for it.
+     Anything carrying a sentence stays full width: two columns of prose at
+     375px would be unreadable. That is why .pain-grid and the cards are not
+     in this list. */
+  .industries, .stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .industry { padding: 17px 10px; gap: 9px; font-size: .86rem; }
+  .industry .ic { width: 40px; height: 40px; border-radius: 11px; }
+  .industry .ic svg { width: 19px; height: 19px; }
+  .stat { padding: 18px 10px; }
+  .stat .num { font-size: 1.85rem; }
+  .stat .label { font-size: .8rem; margin-top: 5px; line-height: 1.4; }
+
+  /* --- One gap scale. It was 14 / 16 / 20 / 22 / 24px depending on which
+     grid you happened to land in, which is what made the page feel loose
+     rather than composed. */
+  .grid, .quotes, .posts, .process { gap: 16px; }
+  .pain-grid { gap: 10px; }
+  .areas { gap: 8px; }
+
+  /* --- Section rhythm. 48px top and bottom across fourteen sections was a
+     screen and a half of empty space. */
+  .section { padding-block: 38px; }
+  .sec-head { margin-bottom: 20px; }
+
+  /* --- Cards: trim the shell, keep the content. */
+  .card { padding: 18px 16px; }
+  .card-icon { width: 46px; height: 46px; border-radius: 13px; margin-bottom: 12px; }
+  .card-icon svg { width: 22px; height: 22px; }
+  .card h3 { margin-bottom: 7px; }
+  .card-list { margin-top: 12px; gap: 7px; }
+
+  /* --- Process steps: the numeral sat alone above the title, costing a line
+     of height on each of six steps. Inline it reads as "01 Business
+     Analysis" and saves the line. */
+  .step { padding: 18px 18px; }
+  .step .n { font-size: 1.5rem; display: inline; margin-right: 9px; }
+  .step h3 { display: inline; font-size: 1.02rem; }
+  .step p { margin-top: 9px; }
+
+  /* --- Readability floor. 132 elements were rendering below 15px, which is
+     small on a phone at arm's length. */
+  .card p, .card-list li, .post p, .step p, .faq-a p, .quote blockquote,
+  .check-list li, .info-card p, .info-card a, .pain { font-size: .95rem; }
+  .card-list li, .check-list li { line-height: 1.5; }
+
+  /* --- Tap targets. Footer links measured 40px tall and inline arrow links
+     34px, both under the 44px minimum. */
+  .footer-links a { min-height: 44px; display: flex; align-items: center; }
+  .link-arrow { min-height: 44px; }
+  /* The phone and email links in the topbar and footer were 34px. They are the
+     two things a visitor on a phone is most likely to tap. */
+  .topbar a, .footer-contact a, .info-card a { min-height: 44px; align-items: center; }
+  .footer-contact li { align-items: center; }
+  .hero-trust li { font-size: .92rem; }
+  /* Links that ARE heading text, plus breadcrumbs. WCAG 2.5.8 exempts inline
+     text links from the target minimum, but these sat at 23px, just under the
+     24px floor. Vertical padding on an inline box grows the hit area without
+     changing the line height, so the text still wraps exactly as before. */
+  .card h3 a, .crumbs a, .footer-bottom a { padding-block: 6px; }
+}
+
+@media (max-width: 400px) {
+  .section { padding-block: 32px; }
+  .industry { font-size: .86rem; padding: 15px 8px; }
+  .card { padding: 17px 15px; }
+}
