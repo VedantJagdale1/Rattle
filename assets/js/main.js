@@ -103,11 +103,16 @@
     var decimals = (el.dataset.count.split('.')[1] || '').length;
     var start = performance.now();
     var dur = 1400;
+    var settle = function () { el.textContent = target.toFixed(decimals) + suffix; };
+    /* If the tween never gets to run, the markup's placeholder stays on screen,
+       and that placeholder is "0" -- so the page would claim zero accounts stay
+       in your name. Land the real number regardless of whether rAF ticks. */
+    var guard = setTimeout(settle, dur + 300);
     var tick = function (now) {
       var p = Math.min((now - start) / dur, 1);
       var eased = 1 - Math.pow(1 - p, 3);
       el.textContent = (target * eased).toFixed(decimals) + suffix;
-      if (p < 1) requestAnimationFrame(tick);
+      if (p < 1) { requestAnimationFrame(tick); } else { clearTimeout(guard); }
     };
     requestAnimationFrame(tick);
   };
@@ -136,12 +141,21 @@
   var queueReveal = function () {
     if (queued) return;
     queued = true;
-    requestAnimationFrame(checkReveal);
+    /* setTimeout rather than requestAnimationFrame: rAF is paused outright
+       while a page is hidden -- a background tab, some low-power modes -- and
+       every .reveal starts at opacity 0. If the check never runs, the content
+       never appears. setTimeout is throttled in that state but still fires. */
+    setTimeout(checkReveal, 16);
   };
 
   window.addEventListener('scroll', queueReveal, { passive: true });
   window.addEventListener('resize', queueReveal);
   window.addEventListener('load', queueReveal);
+  /* Re-check when the page becomes visible: nothing scrolls while it is hidden,
+     so returning to a background tab is the moment to catch up. */
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) queueReveal();
+  });
   checkReveal();
 
   /* ---- Current year in footer ---- */
