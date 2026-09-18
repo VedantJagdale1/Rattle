@@ -389,6 +389,21 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
 .info-card p, .info-card a { font-size: .91rem; color: var(--body); word-break: break-word; }
 .info-card a:hover { color: var(--brand-ink); }
 
+/* ---------- 20b. Client work screenshot ---------- */
+.shot {
+  margin: 4px 0 26px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  overflow: hidden; background: var(--bg-soft); box-shadow: var(--shadow-sm);
+}
+/* A minimal browser chrome so the image reads as a live site at a glance.
+   Deliberately no address bar: this client approved the name, not the link. */
+.shot-bar { display: flex; gap: 6px; align-items: center; padding: 10px 14px;
+  background: var(--bg-soft); border-bottom: 1px solid var(--line); }
+.shot-bar span { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.shot img { width: 100%; height: auto; display: block; }
+.shot figcaption { font-size: .78rem; color: var(--muted); padding: 11px 14px;
+  border-top: 1px solid var(--line); background: var(--surface); }
+
 /* ---------- 21. Footer ---------- */
 .site-footer { background: var(--ink-surface); color: var(--on-ink-muted); padding-block: clamp(46px, 6vw, 68px) 0; }
 .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.3fr; gap: 36px; }
@@ -696,6 +711,12 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
 
   .btn-primary { box-shadow: 0 8px 22px rgba(0, 0, 0, .45); }
   .btn-primary:hover { box-shadow: 0 12px 28px rgba(0, 0, 0, .55); }
+
+  /* dark-mode.md > Dark Mode colors: "consider slightly darkening the image to
+     prevent the background from glowing in the surrounding Dark Mode context".
+     A screenshot of a bright site is exactly that case. */
+  .shot img { filter: brightness(.86) saturate(.94); }
+  .shot-bar span { background: #2E3B57; }
 
   .form-status {
     background: rgba(16, 185, 129, .12);
