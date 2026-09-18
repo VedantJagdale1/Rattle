@@ -835,6 +835,13 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
   .topbar a, .footer-contact a, .info-card a { min-height: 44px; align-items: center; }
   .footer-contact li { align-items: center; }
   .hero-trust li { font-size: .92rem; }
+  /* A desktop screenshot inside a padded card renders about 287px wide on a
+     375px phone, which is an illegible thumbnail. Let it run full-bleed to the
+     card's edges instead -- the calc mirrors the card's own inline padding, so
+     the two stay in step. */
+  .shot { margin-inline: calc(-1 * clamp(26px, 3.4vw, 40px)); border-radius: 0;
+    border-left: 0; border-right: 0; }
+
   /* Links that ARE heading text, plus breadcrumbs. WCAG 2.5.8 exempts inline
      text links from the target minimum, but these sat at 23px, just under the
      24px floor. Vertical padding on an inline box grows the hit area without
