@@ -315,10 +315,13 @@
 
       <!-- Screenshot of the live storefront, captured with the first-visit email
            popup dismissed so the design is what you see.
+           The ?v= is load-bearing: the host serves assets "immutable" for a year,
+           so replacing an image at the same URL leaves every returning visitor on
+           the old one. Bump it whenever this file is replaced.
            No address bar in the frame: the brand name is approved, the link is not. -->
       <figure class="shot">
         <div class="shot-bar"><span></span><span></span><span></span></div>
-        <img src="assets/img/work-partake.jpg" width="1440" height="900" loading="lazy" decoding="async"
+        <img src="assets/img/work-partake.jpg?v=2" width="1440" height="900" loading="lazy" decoding="async"
              alt="The Partake Foods homepage: the brand wordmark with Shop and Find In Store navigation, the headline Partake in Daily Sweetness, and an Explore Flavors button over photography of cookies and sprinkles.">
         <figcaption>The live storefront &mdash; custom Shopify theme, designed and built by Rattle.</figcaption>
       </figure>
