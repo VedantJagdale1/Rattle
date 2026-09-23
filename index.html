@@ -50,7 +50,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__rattleReady)document.documentElement.classList.remove('js');},4000);</script>
-<link rel="stylesheet" href="assets/css/style.css?v=3.4">
+<link rel="stylesheet" href="assets/css/style.css?v=3.5">
 
 <script type="application/ld+json">
 {
@@ -172,18 +172,18 @@
 
         <div class="field">
           <label for="h-name">Full name</label>
-          <input type="text" id="h-name" name="name" placeholder="Your name" required>
+          <input type="text" id="h-name" name="name" placeholder="Your name" required autocomplete="name">
           <span class="err">Please enter your name.</span>
         </div>
         <div class="form-row">
           <div class="field">
             <label for="h-phone">Phone</label>
-            <input type="tel" id="h-phone" name="phone" placeholder="10-digit mobile" required>
+            <input type="tel" id="h-phone" name="phone" placeholder="10-digit mobile" required autocomplete="tel" inputmode="tel">
             <span class="err">Enter a valid phone number.</span>
           </div>
           <div class="field">
             <label for="h-email">Email</label>
-            <input type="email" id="h-email" name="email" placeholder="you@company.com" required>
+            <input type="email" id="h-email" name="email" placeholder="you@company.com" required autocomplete="email">
             <span class="err">Enter a valid email.</span>
           </div>
         </div>
@@ -682,6 +682,6 @@
   </a>
 </div>
 
-<script src="assets/js/main.js?v=3.4"></script>
+<script src="assets/js/main.js?v=3.5"></script>
 </body>
 </html>

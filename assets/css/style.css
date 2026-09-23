@@ -465,7 +465,14 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
     padding: 14px 20px 22px; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden;
     transition: max-height .28s ease, opacity .2s ease, padding .28s ease;
   }
+  /* dvh, not vh. On mobile browsers vh is the LARGE viewport -- the height
+     with the URL bar hidden -- so an 80vh drawer can extend underneath the
+     address bar and its last items become unreachable. dvh tracks whatever is
+     actually visible. vh stays as the fallback for anything that lacks it. */
   .nav-links.is-open { max-height: 80vh; opacity: 1; visibility: visible; overflow-y: auto; }
+  @supports (height: 1dvh) {
+    .nav-links.is-open { max-height: 80dvh; }
+  }
   .nav-links > li > a { padding: 13px 14px; font-size: 1rem; }
   .nav-cta .btn { display: none; }
   .topbar-social { display: none; }

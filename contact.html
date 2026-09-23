@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__rattleReady)document.documentElement.classList.remove('js');},4000);</script>
-<link rel="stylesheet" href="assets/css/style.css?v=3.4">
+<link rel="stylesheet" href="assets/css/style.css?v=3.5">
 </head>
 <body>
 <!-- ============ TOPBAR ============ -->
@@ -129,23 +129,23 @@
         <div class="form-row">
           <div class="field">
             <label for="c-name">Full name *</label>
-            <input type="text" id="c-name" name="name" placeholder="Your name" required>
+            <input type="text" id="c-name" name="name" placeholder="Your name" required autocomplete="name">
             <span class="err">Please enter your name.</span>
           </div>
           <div class="field">
             <label for="c-company">Company name</label>
-            <input type="text" id="c-company" name="company" placeholder="Your business">
+            <input type="text" id="c-company" name="company" placeholder="Your business" autocomplete="organization">
           </div>
         </div>
         <div class="form-row">
           <div class="field">
             <label for="c-phone">Phone *</label>
-            <input type="tel" id="c-phone" name="phone" placeholder="10-digit mobile" required>
+            <input type="tel" id="c-phone" name="phone" placeholder="10-digit mobile" required autocomplete="tel" inputmode="tel">
             <span class="err">Enter a valid phone number.</span>
           </div>
           <div class="field">
             <label for="c-email">Email *</label>
-            <input type="email" id="c-email" name="email" placeholder="you@company.com" required>
+            <input type="email" id="c-email" name="email" placeholder="you@company.com" required autocomplete="email">
             <span class="err">Enter a valid email.</span>
           </div>
         </div>
@@ -179,11 +179,11 @@
         </div>
         <div class="field">
           <label for="c-website">Your website (if any)</label>
-          <input type="text" id="c-website" name="website" placeholder="www.yourcompany.com">
+          <input type="text" id="c-website" name="website" placeholder="www.yourcompany.com" autocomplete="url">
         </div>
         <div class="field">
           <label for="c-message">Tell us about your requirement *</label>
-          <textarea id="c-message" name="message" placeholder="What are you trying to achieve? What have you tried so far?" required></textarea>
+          <textarea id="c-message" name="message" placeholder="What are you trying to achieve? What have you tried so far?" required autocomplete="off"></textarea>
           <span class="err">Please tell us a little about your requirement.</span>
         </div>
         <button type="submit" class="btn btn-primary btn-lg btn-block">Send Enquiry</button>
@@ -291,6 +291,6 @@
   </a>
 </div>
 
-<script src="assets/js/main.js?v=3.4"></script>
+<script src="assets/js/main.js?v=3.5"></script>
 </body>
 </html>
