@@ -104,6 +104,9 @@
     var start = performance.now();
     var dur = 1400;
     var settle = function () { el.textContent = target.toFixed(decimals) + suffix; };
+    /* The CSS switches off transitions under Reduce Motion, but this tween is
+       JavaScript, so it has to check for itself. */
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { settle(); return; }
     /* If the tween never gets to run, the markup's placeholder stays on screen,
        and that placeholder is "0" -- so the page would claim zero accounts stay
        in your name. Land the real number regardless of whether rAF ticks. */
@@ -250,5 +253,32 @@
       });
     });
   });
+
+  /* ---------- Swipe rails: reachable from a keyboard ----------
+     A sideways-scrolling row of cards with no link inside cannot be reached
+     from a keyboard in Safari, which does not make scroll containers
+     focusable on its own. Each rail becomes a focusable, labelled region --
+     but only while it actually scrolls, so the desktop grid does not gain a
+     pointless tab stop. The label is the section's own heading. */
+  var rails = document.querySelectorAll('.is-rail');
+  if (rails.length && 'ResizeObserver' in window) {
+    var railObserver = new ResizeObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var rail = entry.target;
+        if (rail.scrollWidth > rail.clientWidth + 1) {
+          var section = rail.closest('section');
+          var heading = section && section.querySelector('h2');
+          rail.setAttribute('tabindex', '0');
+          rail.setAttribute('role', 'region');
+          if (heading) rail.setAttribute('aria-label', heading.textContent.trim());
+        } else {
+          rail.removeAttribute('tabindex');
+          rail.removeAttribute('role');
+          rail.removeAttribute('aria-label');
+        }
+      });
+    });
+    rails.forEach(function (rail) { railObserver.observe(rail); });
+  }
 
 })();
