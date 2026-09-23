@@ -34,6 +34,8 @@ h1, h2, h3, h4 {
 :root {
   color-scheme: light dark;
 
+  --gutter: 20px;          /* .container side padding; rails cancel it to go full-bleed */
+
   --brand: #1D4ED8;
   --brand-dark: #1E3A8A;
   --brand-light: #3B82F6;
@@ -90,7 +92,7 @@ h1, h2, h3, h4 {
 }
 
 /* ---------- 3. Layout helpers ---------- */
-.container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: 20px; }
+.container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
 .section { padding-block: clamp(56px, 8vw, 104px); }
 .section--soft { background: var(--bg-soft); }
 .section--ink { background: var(--ink-surface); color: var(--on-ink); }
@@ -586,10 +588,41 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
 
   /* Breathing room for stacked form fields */
   .field { margin-bottom: 16px; }
+
+  /* ---- Card rails ----
+     A row of peer cards stacks to one column on a phone, which is what made the
+     homepage twenty screens tall: six service cards alone cost three screens to
+     scroll past. As a rail they cost one.
+
+     Nothing is hidden to achieve it. Every card stays in the DOM, visible and
+     indexable -- it is reached sideways instead of downwards, so this costs no
+     content and does not touch the desktop layout.
+
+     The cards are sized to 86% so the next one always peeks in from the right.
+     That peek is the only affordance a swipe rail gets, and without it people
+     read the first card as the only card. */
+  .is-rail {
+    grid-template-columns: none;        /* beat the single-column stack above */
+    grid-auto-flow: column;
+    grid-auto-columns: 86%;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    overscroll-behavior-x: contain;     /* don't chain into the back-swipe */
+    /* full-bleed: cancel the container gutter, then re-add it inside so the
+       first card still lines up with the heading above it */
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    padding-block-end: 4px;
+    scrollbar-width: none;
+  }
+  .is-rail::-webkit-scrollbar { display: none; }
+  .is-rail > * { scroll-snap-align: start; min-width: 0; }
 }
 
 @media (max-width: 400px) {
-  .container { padding-inline: 16px; }
+  :root { --gutter: 16px; }
   .card { padding: 20px 17px; }
 }
 
