@@ -194,7 +194,7 @@ h3, .h3 { font-size: clamp(1.1rem, 2vw, 1.3rem); }
 .site-footer .brand-mark .s1 { fill: #FFFFFF; }
 .site-footer .brand-mark .s2 { fill: #93C5FD; }
 .site-footer .brand-mark .s3 { fill: var(--accent); }
-.brand small { display: block; font-family: 'Inter', sans-serif; font-size: .62rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.brand small { display: block; font-family: 'Inter', sans-serif; font-size: .7rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
 
 .nav-links { display: flex; align-items: center; gap: 4px; }
 .nav-links > li > a {
@@ -591,7 +591,6 @@ a, button, .faq-q, .area, .industry { -webkit-tap-highlight-color: rgba(29, 78, 
 @media (max-width: 400px) {
   .container { padding-inline: 16px; }
   .card { padding: 20px 17px; }
-  .brand small { font-size: .56rem; letter-spacing: .14em; }
 }
 
 /* Respect the notch on landscape phones */
