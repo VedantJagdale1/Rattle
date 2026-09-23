@@ -52,6 +52,11 @@
 <script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__rattleReady)document.documentElement.classList.remove('js');},4000);</script>
 <link rel="stylesheet" href="assets/css/style.css?v=3.7">
 
+<!-- sameAs is deliberately absent. It is the statement "this business IS that
+     account", so it must only ever list profiles Rattle actually controls; the
+     three generic handles that used to sit here were placeholders, and pointing
+     Google at a stranger's profile is worse than saying nothing. Add it back the
+     same day the real profile URLs go into the topbar markup below. -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -70,12 +75,7 @@
     "addressRegion": "Maharashtra",
     "addressCountry": "IN"
   },
-  "areaServed": "IN",
-  "sameAs": [
-    "https://www.linkedin.com/company/rattle",
-    "https://www.instagram.com/rattle",
-    "https://www.facebook.com/rattle"
-  ]
+  "areaServed": "IN"
 }
 </script>
 </head>
